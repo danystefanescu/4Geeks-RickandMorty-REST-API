@@ -288,6 +288,25 @@ def get_episode_by_id(episode_id):
     return jsonify({"Result": episode_serialize}), 200
 
 
+# ------------------- FAVORITES -------------------------------------------------------------------->
+
+@app.route('/user/<int:user_id>/favorites', methods=['GET'])
+def obtain_favorites(user_id):
+
+    response_characters = User.query.filter_by(id=user_id).first().charactersFav
+    response_locations = User.query.filter_by(id=user_id).first().locationsFav
+    response_episodes = User.query.filter_by(id=user_id).first().episodesFav
+    Characters = [x.serialize() for x in response_characters]
+    Locations = [x.serialize() for x in response_locations]
+    Episodes = [x.serialize() for x in response_episodes]
+
+    return jsonify({
+        "CharactersFav": Characters,
+        "LocationsFav": Locations,
+        "EpisodesFav": Episodes
+    }), 200
+
+
 # <------------------- SERVER RUN ON PORT 3000 -------------------------------------------------------->
 
 # this only runs if `$ python src/app.py` is executed
